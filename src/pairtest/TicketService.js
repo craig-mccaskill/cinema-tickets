@@ -1,9 +1,9 @@
 import TicketTypeRequest from './lib/TicketTypeRequest.js';
 import InvalidPurchaseException from './lib/InvalidPurchaseException.js';
-
 import TicketPaymentService from '../thirdparty/paymentgateway/TicketPaymentService.js';
 import SeatReservationService from '../thirdparty/seatbooking/SeatReservationService.js'
 import { MAX_TICKETS, TICKET_PRICES, MAX_INFANTS_PER_ADULT } from './lib/constants.js';
+import logger from './lib/logger-config.js';
 
 export default class TicketService {
   
@@ -23,6 +23,7 @@ export default class TicketService {
     this.seatReservationService.reserveSeat(accountId, totalSeatCount);
 
     // return success along with ticket info
+    logger.info('Purchase complete');
     return {
       success: true,
       totalCost: totalTicketCost,
@@ -32,12 +33,14 @@ export default class TicketService {
 
   #validateAccountId(accountId) {
     if (!Number.isInteger(accountId || accountId <= 0)){
+      logger.error(`Invalid account ID: ${accountId}`);
       throw new InvalidPurchaseException;
     }
   }
 
   #validateTicketRequest(ticketTypeRequest) {
     if (!ticketTypeRequest || ticketTypeRequest.length === 0) {
+      logger.error('No tickets requested');
       throw new InvalidPurchaseException;
     }
 
@@ -45,6 +48,7 @@ export default class TicketService {
     // count ticket by type
     ticketTypeRequest.forEach((request) => {
       if (!request.getTicketType()) {
+        logger.error('Invalid ticket request format');
         throw new InvalidPurchaseException;
       }
       ticketCounts[request.getTicketType()] += request.getNoOfTickets();
@@ -56,6 +60,7 @@ export default class TicketService {
     const totalTickets = Object.values(ticketCounts).reduce((sum, count) => sum + count, 0);
 
     if (totalTickets > MAX_TICKETS) {
+      logger.error(`Exceeded max tickets - tickets requested: ${totalTickets}`);
       throw new InvalidPurchaseException;
     }
 
@@ -69,11 +74,13 @@ export default class TicketService {
 
     // check if adult ticket present and includes child/infant
     if (adults === 0 && (children > 0 || infants > 0)) {
+      logger.error('Adult ticket required');
       throw new InvalidPurchaseException;
     }
 
     // check if more infants than adults - 
     if (infants > adults) {
+      logger.error('Infants cannot exceed amount of adults');
       throw new InvalidPurchaseException;
     }
   }
