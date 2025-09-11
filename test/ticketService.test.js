@@ -110,11 +110,39 @@ describe('TicketService', () => {
                 expect(result.totalCost).toBe(575);
                 expect(result.totalSeats).toBe(25);
             })
+
+            it('should process valid ticket purchase - multiple ticket requests of same type', () => {
+                const accountId = 1234;
+                const request = [
+                    new TicketTypeRequest('ADULT', 1),
+                    new TicketTypeRequest('ADULT', 2),
+                    new TicketTypeRequest('CHILD', 1),
+                    new TicketTypeRequest('CHILD', 1),
+                    new TicketTypeRequest('INFANT', 1),
+                    new TicketTypeRequest('INFANT', 1)
+                ];
+
+                const result = ticketService.purchaseTickets(accountId, ...request);
+
+                expect(mockTicketPaymentService.makePayment).toHaveBeenCalledWith(accountId, 105);
+                expect(mockSeatReservationService.reserveSeat).toHaveBeenCalledWith(accountId, 5);
+
+                expect(result.success).toBe(true);
+                expect(result.totalCost).toBe(105);
+                expect(result.totalSeats).toBe(5);
+            })
         })
 
         describe('invalid requests', () => {
             it('should reject request due to invalid account ID', () => {
                 const accountId = 0;
+                const adultRequest = new TicketTypeRequest('ADULT', 1);
+
+                expect(() => ticketService.purchaseTickets(accountId, adultRequest)).toThrow(InvalidPurchaseException);
+            })
+
+            it('should reject request due to undefined account ID', () => {
+                const accountId = null;
                 const adultRequest = new TicketTypeRequest('ADULT', 1);
 
                 expect(() => ticketService.purchaseTickets(accountId, adultRequest)).toThrow(InvalidPurchaseException);
@@ -150,6 +178,14 @@ describe('TicketService', () => {
 
             it('should reject due to empty ticket request', () => {
                 const accountId = 123;
+                const request = [];
+
+                expect(() => ticketService.purchaseTickets(accountId, ...request)).toThrow(InvalidPurchaseException);
+
+            })
+
+            it('should reject due to empty ticket request and null accountId', () => {
+                const accountId = null;
                 const request = [];
 
                 expect(() => ticketService.purchaseTickets(accountId, ...request)).toThrow(InvalidPurchaseException);
