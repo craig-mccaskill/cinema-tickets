@@ -37,8 +37,8 @@ describe('TicketService', () => {
                 expect(mockSeatReservationService.reserveSeat).toHaveBeenCalledWith(accountId, 3);
 
                 expect(result.success).toBe(true);
-                expect(result.totalCost).toBe(65);
-                expect(result.totalSeats).toBe(3);
+                expect(result.ticketInfo.totalCost).toBe(65);
+                expect(result.ticketInfo.totalSeats).toBe(3);
             })
 
             it('should process valid ticket purchase - scenario 2', () => {
@@ -55,8 +55,8 @@ describe('TicketService', () => {
                 expect(mockSeatReservationService.reserveSeat).toHaveBeenCalledWith(accountId, 2);
 
                 expect(result.success).toBe(true);
-                expect(result.totalCost).toBe(40);
-                expect(result.totalSeats).toBe(2);
+                expect(result.ticketInfo.totalCost).toBe(40);
+                expect(result.ticketInfo.totalSeats).toBe(2);
             })
 
             it('should process valid ticket purchase - scenario 3', () => {
@@ -72,8 +72,8 @@ describe('TicketService', () => {
                 expect(mockSeatReservationService.reserveSeat).toHaveBeenCalledWith(accountId, 2);
 
                 expect(result.success).toBe(true);
-                expect(result.totalCost).toBe(40);
-                expect(result.totalSeats).toBe(2);
+                expect(result.ticketInfo.totalCost).toBe(40);
+                expect(result.ticketInfo.totalSeats).toBe(2);
             })
 
             it('should process valid ticket purchase - max ticket scenario', () => {
@@ -90,8 +90,8 @@ describe('TicketService', () => {
                 expect(mockSeatReservationService.reserveSeat).toHaveBeenCalledWith(accountId, 22);
 
                 expect(result.success).toBe(true);
-                expect(result.totalCost).toBe(530);
-                expect(result.totalSeats).toBe(22);
+                expect(result.ticketInfo.totalCost).toBe(530);
+                expect(result.ticketInfo.totalSeats).toBe(22);
             })
 
             it('should process valid ticket purchase - max ticket scenario', () => {
@@ -107,8 +107,8 @@ describe('TicketService', () => {
                 expect(mockSeatReservationService.reserveSeat).toHaveBeenCalledWith(accountId, 25);
 
                 expect(result.success).toBe(true);
-                expect(result.totalCost).toBe(575);
-                expect(result.totalSeats).toBe(25);
+                expect(result.ticketInfo.totalCost).toBe(575);
+                expect(result.ticketInfo.totalSeats).toBe(25);
             })
 
             it('should process valid ticket purchase - multiple ticket requests of same type', () => {
@@ -128,8 +128,8 @@ describe('TicketService', () => {
                 expect(mockSeatReservationService.reserveSeat).toHaveBeenCalledWith(accountId, 5);
 
                 expect(result.success).toBe(true);
-                expect(result.totalCost).toBe(105);
-                expect(result.totalSeats).toBe(5);
+                expect(result.ticketInfo.totalCost).toBe(105);
+                expect(result.ticketInfo.totalSeats).toBe(5);
             })
         })
 

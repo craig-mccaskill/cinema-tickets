@@ -30,9 +30,13 @@ export default class TicketService {
     // return success along with ticket info
     logger.info(`Transaction ID: ${transactionId} - Purchase complete`);
     return {
+      transactionId: transactionId,
       success: true,
-      totalCost: totalTicketCost,
-      totalSeats: totalSeatCount
+      ticketInfo: {
+        accountId: accountId,
+        totalCost: totalTicketCost,
+        totalSeats: totalSeatCount
+      }
     }
   }
 
