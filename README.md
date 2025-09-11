@@ -13,3 +13,17 @@ Coding excercise for a cinena booking system
 
 - Infants do not get a seat, they will sit on adult's lap
 - An adult ticket is required, (Child and infant tickets cannot be purchased without an adult ticket)
+
+# How to run
+
+Install dependencies
+
+```shell
+npm install
+```
+
+Run tests (this will include code coverage report which can be accessed in ./coverage)
+
+```shell
+npm run test
+```

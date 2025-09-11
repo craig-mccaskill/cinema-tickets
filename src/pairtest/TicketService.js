@@ -6,9 +6,6 @@ import SeatReservationService from '../thirdparty/seatbooking/SeatReservationSer
 import { MAX_TICKETS, TICKET_PRICES, MAX_INFANTS_PER_ADULT } from './lib/constants.js';
 
 export default class TicketService {
-  /**
-   * Should only have private methods other than the one below.
-   */
   
   constructor() {
     this.ticketPaymentService = new TicketPaymentService();
@@ -25,6 +22,7 @@ export default class TicketService {
     this.ticketPaymentService.makePayment(accountId, totalTicketCost);
     this.seatReservationService.reserveSeat(accountId, totalSeatCount);
 
+    // return success along with ticket info
     return {
       success: true,
       totalCost: totalTicketCost,
@@ -52,6 +50,7 @@ export default class TicketService {
       ticketCounts[request.getTicketType()] += request.getNoOfTickets();
     });
 
+    // check tickets against business rules
     this.#validatePurchaseRules(ticketCounts);
 
     const totalTickets = Object.values(ticketCounts).reduce((sum, count) => sum + count, 0);
@@ -68,10 +67,12 @@ export default class TicketService {
     const children = tickets.CHILD || 0;
     const infants = tickets.INFANT || 0;
 
+    // check if adult ticket present and includes child/infant
     if (adults === 0 && (children > 0 || infants > 0)) {
       throw new InvalidPurchaseException;
     }
 
+    // check if more infants than adults - 
     if (infants > adults) {
       throw new InvalidPurchaseException;
     }
