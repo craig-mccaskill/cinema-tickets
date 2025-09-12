@@ -9,9 +9,10 @@ import logger from './lib/logger-config.js';
 
 export default class TicketService {
   
-  constructor() {
-    this.ticketPaymentService = new TicketPaymentService();
-    this.seatReservationService = new SeatReservationService();
+  constructor(ticketPaymentService, seatReservationService) {
+    // Use injected dependencies or use default
+    this.ticketPaymentService = ticketPaymentService || new TicketPaymentService();
+    this.seatReservationService = seatReservationService || new SeatReservationService();
   }
 
   purchaseTickets(accountId, ...ticketTypeRequests) {

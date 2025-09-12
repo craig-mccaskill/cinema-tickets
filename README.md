@@ -1,6 +1,6 @@
 # Cinema ticket service 
 
-Coding excercise for a cinena booking system
+Coding excercise for a cinema booking system
 
 
 # Business rules 
