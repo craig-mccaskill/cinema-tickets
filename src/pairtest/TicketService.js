@@ -78,11 +78,10 @@ export default class TicketService {
 
   #validatePurchaseRules(tickets, transactionId) {
     const adults = tickets.ADULT || 0;
-    const children = tickets.CHILD || 0;
     const infants = tickets.INFANT || 0;
 
-    // check if adult ticket present and includes child/infant
-    if (adults === 0 && (children > 0 || infants > 0)) {
+    // check if adult ticket present
+    if (adults === 0) {
       logger.error(`Transaction ID: ${transactionId} - Adult ticket required`);
       throw new InvalidPurchaseException('Adult ticket required');
     }
