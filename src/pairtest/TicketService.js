@@ -43,14 +43,14 @@ export default class TicketService {
   #validateAccountId(accountId, transactionId) {
     if (!Number.isInteger(accountId || accountId <= 0)){
       logger.error(`Transaction ID: ${transactionId} - Invalid account ID: ${accountId}`);
-      throw new InvalidPurchaseException;
+      throw new InvalidPurchaseException('Invalid account ID');
     }
   }
 
   #validateTicketRequest(ticketTypeRequest, transactionId) {
     if (!ticketTypeRequest || ticketTypeRequest.length === 0) {
       logger.error(`Transaction ID: ${transactionId} - No tickets requested`);
-      throw new InvalidPurchaseException;
+      throw new InvalidPurchaseException('No tickets requested');
     }
 
     const ticketCounts = { ADULT: 0, CHILD: 0, INFANT: 0 };
@@ -58,7 +58,7 @@ export default class TicketService {
     ticketTypeRequest.forEach((request) => {
       if (!request.getTicketType()) {
         logger.error(`Transaction ID: ${transactionId} - Invalid ticket request format`);
-        throw new InvalidPurchaseException;
+        throw new InvalidPurchaseException('Invalid ticket request format');
       }
       ticketCounts[request.getTicketType()] += request.getNoOfTickets();
     });
@@ -70,7 +70,7 @@ export default class TicketService {
 
     if (totalTickets > MAX_TICKETS) {
       logger.error(`Transaction ID: ${transactionId} - Exceeded max tickets - tickets requested: ${totalTickets}`);
-      throw new InvalidPurchaseException;
+      throw new InvalidPurchaseException('Exceeded max tickets');
     }
 
     return { ticketCounts, totalTickets };
@@ -84,13 +84,13 @@ export default class TicketService {
     // check if adult ticket present and includes child/infant
     if (adults === 0 && (children > 0 || infants > 0)) {
       logger.error(`Transaction ID: ${transactionId} - Adult ticket required`);
-      throw new InvalidPurchaseException;
+      throw new InvalidPurchaseException('Adult ticket required');
     }
 
     // check if more infants than adults - 
     if (infants > adults) {
       logger.error(`Transaction ID: ${transactionId} - Infants cannot exceed amount of adults`);
-      throw new InvalidPurchaseException;
+      throw new InvalidPurchaseException('Infants cannot exceed amount of adults');
     }
   }
 

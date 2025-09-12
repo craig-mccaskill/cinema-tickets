@@ -137,14 +137,14 @@ describe('TicketService', () => {
             const accountId = 0;
             const adultRequest = new TicketTypeRequest('ADULT', 1);
 
-            expect(() => ticketService.purchaseTickets(accountId, adultRequest)).toThrow(InvalidPurchaseException);
+            expect(() => ticketService.purchaseTickets(accountId, adultRequest)).toThrow(new InvalidPurchaseException('Invalid account ID'));
         })
 
         it('should reject request due to undefined account ID', () => {
             const accountId = null;
             const adultRequest = new TicketTypeRequest('ADULT', 1);
 
-            expect(() => ticketService.purchaseTickets(accountId, adultRequest)).toThrow(InvalidPurchaseException);
+            expect(() => ticketService.purchaseTickets(accountId, adultRequest)).toThrow(new InvalidPurchaseException('Invalid account ID'));
         })
 
         it('should reject request due to number of tickets in correct format', () => {
@@ -159,7 +159,7 @@ describe('TicketService', () => {
                 new TicketTypeRequest('INFANT', 1)
             ];
 
-            expect(() => ticketService.purchaseTickets(accountId, ...request)).toThrow(InvalidPurchaseException);
+            expect(() => ticketService.purchaseTickets(accountId, ...request)).toThrow(new InvalidPurchaseException('Adult ticket required'));
 
         })
 
@@ -171,7 +171,7 @@ describe('TicketService', () => {
                 new TicketTypeRequest('INFANT', 5)
             ];
 
-            expect(() => ticketService.purchaseTickets(accountId, ...request)).toThrow(InvalidPurchaseException);
+            expect(() => ticketService.purchaseTickets(accountId, ...request)).toThrow(new InvalidPurchaseException('Infants cannot exceed amount of adults'));
 
         })
 
@@ -179,7 +179,7 @@ describe('TicketService', () => {
             const accountId = 123;
             const request = [];
 
-            expect(() => ticketService.purchaseTickets(accountId, ...request)).toThrow(InvalidPurchaseException);
+            expect(() => ticketService.purchaseTickets(accountId, ...request)).toThrow(new InvalidPurchaseException('No tickets requested'));
 
         })
 
@@ -187,7 +187,7 @@ describe('TicketService', () => {
             const accountId = null;
             const request = [];
 
-            expect(() => ticketService.purchaseTickets(accountId, ...request)).toThrow(InvalidPurchaseException);
+            expect(() => ticketService.purchaseTickets(accountId, ...request)).toThrow(new InvalidPurchaseException('Invalid account ID'));
 
         })
 
@@ -199,7 +199,7 @@ describe('TicketService', () => {
                 new TicketTypeRequest('INFANT', 3)
             ];
 
-            expect(() => ticketService.purchaseTickets(accountId, ...request)).toThrow(InvalidPurchaseException);
+            expect(() => ticketService.purchaseTickets(accountId, ...request)).toThrow(new InvalidPurchaseException('Exceeded max tickets'));
 
         })
 
