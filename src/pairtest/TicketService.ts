@@ -35,7 +35,10 @@ export default class TicketService {
     // Generate transaction ID
     const transactionId : string = uuidv4();
 
+    // validate account id
     this.#validateAccountId(accountId, transactionId);
+
+    // gather ticket info and calculte price and seats required
     const ticketInfo = this.#validateTicketRequest(ticketTypeRequests, transactionId);
     const totalTicketCost: number = this.#calculateTicketDetails(ticketInfo);
     const totalSeatCount: number = this.#calculateTotalSeats(ticketInfo);
@@ -78,7 +81,7 @@ export default class TicketService {
         throw new InvalidPurchaseException('Invalid ticket request format');
       }
 
-      // calculate number of each type of ticket
+      // calculate number of each type of ticket 
       const ticketType = request.getTicketType() as TicketType;
       ticketCounts[ticketType] += request.getNoOfTickets();
     });
@@ -86,6 +89,7 @@ export default class TicketService {
     // check tickets against business rules
     this.#validatePurchaseRules(ticketCounts, transactionId);
 
+    // calculate total amount of tickets 
     const totalTickets = Object.values(ticketCounts).reduce((sum, count) => sum + count, 0);
 
     if (totalTickets > MAX_TICKETS) {
@@ -106,7 +110,7 @@ export default class TicketService {
       throw new InvalidPurchaseException('Adult ticket required');
     }
 
-    // check if more infants than adults - 
+    // check if more infants than adults 
     if (infants > adults) {
       logger.error(`Transaction ID: ${transactionId} - Infants cannot exceed amount of adults`);
       throw new InvalidPurchaseException('Infants cannot exceed amount of adults');
@@ -126,7 +130,7 @@ export default class TicketService {
   #calculateTotalSeats(ticketInfo: TicketInfo) {
     // Calculate number of seats - exclude any ticket types that do no require a seat e.g. infant
     const totalSeats: number = Object.entries(ticketInfo.ticketCounts)
-      .filter(([type]) => TICKET_TYPES_THAT_REQUIRE_A_SEAT.includes(type))
+      .filter(([type]) => TICKET_TYPES_THAT_REQUIRE_A_SEAT.includes(type)) // filter out any ticket types that don't require a seat
       .reduce((sum, type) => sum + type[1], 0)
 
     return totalSeats;

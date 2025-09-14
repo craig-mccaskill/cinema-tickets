@@ -32,6 +32,12 @@ Run tests (this will include code coverage report which can be accessed in ./cov
 npm run test
 ```
 
+Run linting check
+
+```shell
+npm run lint
+```
+
 # logs
 
 Info and error logs can be viewed from ./logs directory which will log test cases
