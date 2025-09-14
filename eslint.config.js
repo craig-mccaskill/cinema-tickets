@@ -1,10 +1,17 @@
 import globals from "globals";
-import { defineConfig, globalIgnores  } from "eslint/config";
+import tseslint from "typescript-eslint";
 
-export default defineConfig([
-  globalIgnores(["coverage/**", "logs/**"]),
-  { 
-    files: ["**/*.{js,mjs,cjs}"],
-    languageOptions: { globals: globals.browser },
+export default [
+  {
+    ignores: ["coverage/**", "logs/**"]
   },
-]);
+  ...tseslint.configs.recommended,
+  {
+    files: ["**/*.{js,mjs,cjs,ts}"],
+    languageOptions: {
+      globals: globals.browser,
+      ecmaVersion: 2020,
+      sourceType: "module",
+    },
+  },
+];

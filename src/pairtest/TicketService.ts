@@ -3,7 +3,7 @@ import TicketTypeRequest from './lib/TicketTypeRequest.js';
 import InvalidPurchaseException from './lib/InvalidPurchaseException.js';
 import TicketPaymentService from '../thirdparty/paymentgateway/TicketPaymentService.js';
 import SeatReservationService from '../thirdparty/seatbooking/SeatReservationService.js';
-import { MAX_TICKETS, TICKET_PRICES, MAX_INFANTS_PER_ADULT } from './lib/constants.js';
+import { MAX_TICKETS, TICKET_PRICES, TICKET_TYPES_THAT_REQUIRE_A_SEAT } from './lib/constants.js';
 import logger from './lib/logger-config.js';
 
 // define types of tickets
@@ -19,7 +19,6 @@ interface TicketInfo {
   ticketCounts: TicketCounts;
   totalTickets: number;
 };
-
 
 export default class TicketService {
   private ticketPaymentService: TicketPaymentService;
@@ -78,7 +77,8 @@ export default class TicketService {
         logger.error(`Transaction ID: ${transactionId} - Invalid ticket request format`);
         throw new InvalidPurchaseException('Invalid ticket request format');
       }
-      // ticketCounts[request.getTicketType()] += request.getNoOfTickets();
+
+      // calculate number of each type of ticket
       const ticketType = request.getTicketType() as TicketType;
       ticketCounts[ticketType] += request.getNoOfTickets();
     });
@@ -124,6 +124,11 @@ export default class TicketService {
   }
 
   #calculateTotalSeats(ticketInfo: TicketInfo) {
-    return ticketInfo.ticketCounts.ADULT + ticketInfo.ticketCounts.CHILD;
+    // Calculate number of seats - exclude any ticket types that do no require a seat e.g. infant
+    const totalSeats: number = Object.entries(ticketInfo.ticketCounts)
+      .filter(([type]) => TICKET_TYPES_THAT_REQUIRE_A_SEAT.includes(type))
+      .reduce((sum, type) => sum + type[1], 0)
+
+    return totalSeats;
   }
 }
