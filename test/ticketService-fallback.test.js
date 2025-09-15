@@ -1,6 +1,4 @@
 import { jest } from '@jest/globals';
-import TicketService from "../src/pairtest/TicketService";
-import TicketTypeRequest from "../src/pairtest/lib/TicketTypeRequest";
 
 const mockTicketPaymentService = { makePayment: jest.fn() };
 const mockSeatReservationService = { reserveSeat: jest.fn() };
@@ -12,6 +10,9 @@ jest.unstable_mockModule('../src/thirdparty/paymentgateway/TicketPaymentService.
 jest.mock('../src/thirdparty/seatbooking/SeatReservationService.js', () => ({
     default:  jest.fn().mockImplementation(() => mockSeatReservationService)
 }));
+
+const { default: TicketService } = await import('../src/pairtest/TicketService.js');
+const { default: TicketTypeRequest } = await import('../src/pairtest/lib/TicketTypeRequest.js');
 
 describe('TicketService - no dependencies injected - should use fallback', () => {
     let ticketService;
