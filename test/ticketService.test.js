@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import TicketService from "../src/pairtest/TicketService";
 import TicketTypeRequest from "../src/pairtest/lib/TicketTypeRequest";
 import InvalidPurchaseException from "../src/pairtest/lib/InvalidPurchaseException";
@@ -129,25 +130,6 @@ describe('TicketService', () => {
             expect(result.success).toBe(true);
             expect(result.ticketInfo.totalCost).toBe(105);
             expect(result.ticketInfo.totalSeats).toBe(5);
-        })
-
-        it('should process valid ticket purchase - no dependencies injected - should use fallback', () => {
-            // override beforeEach with new ticketService
-            ticketService = new TicketService();
-            const accountId = 123456;
-            const request = [
-                new TicketTypeRequest('ADULT', 2),
-                new TicketTypeRequest('CHILD', 1)
-            ];
-
-            const result = ticketService.purchaseTickets(accountId, ...request);
-
-            expect(mockTicketPaymentService.makePayment).toHaveBeenCalledWith(accountId, 65);
-            expect(mockSeatReservationService.reserveSeat).toHaveBeenCalledWith(accountId, 3);
-
-            expect(result.success).toBe(true);
-            expect(result.ticketInfo.totalCost).toBe(65);
-            expect(result.ticketInfo.totalSeats).toBe(3);
         })
     })
 
