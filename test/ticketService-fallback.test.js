@@ -1,4 +1,4 @@
-// import { jest } from '@jest/globls';
+import { jest } from '@jest/globls';
 
 const mockTicketPaymentService = { makePayment: jest.fn() };
 const mockSeatReservationService = { reserveSeat: jest.fn() };

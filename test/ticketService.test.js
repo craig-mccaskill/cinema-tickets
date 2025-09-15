@@ -1,3 +1,4 @@
+import { jest } from '@jest/globls';
 import TicketService from "../src/pairtest/TicketService";
 import TicketTypeRequest from "../src/pairtest/lib/TicketTypeRequest";
 import InvalidPurchaseException from "../src/pairtest/lib/InvalidPurchaseException";
