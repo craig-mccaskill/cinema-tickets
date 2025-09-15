@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals';
+import TicketService from "../src/pairtest/TicketService";
 
 const mockTicketPaymentService = { makePayment: jest.fn() };
 const mockSeatReservationService = { reserveSeat: jest.fn() };
