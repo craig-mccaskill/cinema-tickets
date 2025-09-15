@@ -7,7 +7,7 @@ jest.unstable_mockModule('../src/thirdparty/paymentgateway/TicketPaymentService.
     default:  jest.fn().mockImplementation(() => mockTicketPaymentService)
 }));
 
-jest.mock('../src/thirdparty/seatbooking/SeatReservationService.js', () => ({
+jest.unstable_mockModule('../src/thirdparty/seatbooking/SeatReservationService.js', () => ({
     default:  jest.fn().mockImplementation(() => mockSeatReservationService)
 }));
 
